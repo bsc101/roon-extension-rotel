@@ -18,7 +18,7 @@ var roon = new RoonApi({
     display_name:        'Rotel Volume/Source Control',
     display_version:     '1.0.0',
     publisher:           'Boris Schaedler',
-    email:               'bsc@bsc101.eu',
+    email:               'dev@bsc101.eu',
     website:             'https://github.com/bsc101/roon-extension-rotel',
 });
 
