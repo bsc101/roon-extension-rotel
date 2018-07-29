@@ -1,0 +1,18 @@
+{
+  "name": "roon-extension-rotel",
+  "version": "1.0.0",
+  "description": "Roon Volume/Source Control Extension to control Rotel devices via network.",
+  "main": "app.js",
+  "author": "Boris Schaedler",
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "debug": "^3.1.0",
+    "node-cleanup": "^2.1.2",
+    "node-roon-api": "github:roonlabs/node-roon-api",
+    "node-roon-api-settings": "github:roonlabs/node-roon-api-settings",
+    "node-roon-api-source-control": "github:roonlabs/node-roon-api-source-control",
+    "node-roon-api-status": "github:roonlabs/node-roon-api-status",
+    "node-roon-api-volume-control": "github:roonlabs/node-roon-api-volume-control"
+  }
+}
