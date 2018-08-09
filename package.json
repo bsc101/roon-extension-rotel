@@ -5,7 +5,6 @@
   "main": "app.js",
   "author": "Boris Schaedler",
   "license": "Apache-2.0",
-  "private": true,
   "dependencies": {
     "debug": "^3.1.0",
     "node-cleanup": "^2.1.2",
