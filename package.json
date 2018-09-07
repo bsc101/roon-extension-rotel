@@ -1,6 +1,6 @@
 {
   "name": "roon-extension-rotel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Roon Volume/Source Control Extension to control Rotel devices via network.",
   "main": "app.js",
   "author": "Boris Schaedler",

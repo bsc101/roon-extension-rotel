@@ -54,4 +54,16 @@ This code is based on the following projects:
 * Rotel device tested: Rotel RC 1590
 * For source control and power signalling to work correctly, you need to enter the name of the source in the settings for the extension (e.g. aux, coax1, opt2, ...).
 * Make sure your Rotel device has network standby enabled: set power mode to 'quick'. Otherwise you will not be able to turn your device on from within Roon.
-
+* If you want to start more than one instance of this extension, you have to specify some arbitrary instance name. Start every instance with a different instance name:
+    ```bash
+    node . -inst:your_instance_name
+    ```
+    Example:
+    ```bash
+    node . -inst:RotelAmp1
+    ```
+    and:
+    ```bash
+    node . -inst:RotelAmp2
+    ```
+    This is needed if you have more than one Rotel amp or more than one Roon device connected to one amp.

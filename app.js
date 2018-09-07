@@ -12,17 +12,29 @@ var nodeCleanup = require('node-cleanup');
 
 var RotelDevice = require("./rotel-device");
 var rotel = {};
+var instance = "";
+var instance_display_name = "";
+
+init();
 
 var roon = new RoonApi({
-    extension_id:        'eu.bsc101.roon.rotel',
-    display_name:        'Rotel Volume/Source Control',
-    display_version:     '1.0.0',
+    extension_id:        'eu.bsc101.roon.rotel' + instance,
+    display_name:        'Rotel Volume/Source Control' + instance_display_name,
+    display_version:     '1.0.1',
     publisher:           'Boris Schaedler',
     email:               'dev@bsc101.eu',
     website:             'https://github.com/bsc101/roon-extension-rotel',
+    set_persisted_state: function(state)
+    {
+        this.save_config("roonstate" + instance, state);
+    },
+    get_persisted_state: function()
+    {
+        return this.load_config("roonstate" + instance) || {};
+    }
 });
 
-var mysettings = roon.load_config("settings") || {
+var mysettings = roon.load_config("settings" + instance) || {
     displayname: "Rotel Device",
     hostname: "",
     port: "9590",
@@ -90,7 +102,7 @@ var svc_settings = new RoonApiSettings(roon, {
             mysettings.id = _name == mysettings.displayname ? _id : Math.floor(Math.random() * 65536);
 
             svc_settings.update_settings(l);
-            roon.save_config("settings", mysettings);
+            roon.save_config("settings" + instance, mysettings);
 
             setup();
         }
@@ -104,6 +116,26 @@ var svc_source_control = new RoonApiSourceControl(roon);
 roon.init_services({
     provided_services: [ svc_status, svc_settings, svc_volume_control, svc_source_control ]
 });
+
+function init()
+{
+    process.argv.forEach(function (val, index, array)
+    {
+        debug(index + ': ' + val);
+
+        if (val.startsWith("-inst:"))
+        {
+            var inst = val.substr(6);
+            if (inst)
+            {
+                instance = "." + inst;
+                debug('instance = %s', instance);
+
+                instance_display_name = " (" + inst + ")";
+            }
+        }
+    });
+}
 
 function setup() 
 {
@@ -166,6 +198,8 @@ function ev_connected(data)
     if (rotel.volume_control)
     {
         debug("Reconnected...");
+
+        svc_status.set_status("Connected to '" + mysettings.displayname + "'", false);
 
         rotel.volume_control.update_state({ 
             volume_value: rotel.volume_value, 
