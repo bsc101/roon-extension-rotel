@@ -20,7 +20,7 @@ init();
 var roon = new RoonApi({
     extension_id:        'eu.bsc101.roon.rotel' + instance,
     display_name:        'Rotel Volume/Source Control' + instance_display_name,
-    display_version:     '1.0.1',
+    display_version:     '1.0.2',
     publisher:           'Boris Schaedler',
     email:               'dev@bsc101.eu',
     website:             'https://github.com/bsc101/roon-extension-rotel',
@@ -221,8 +221,10 @@ function ev_connected(data)
     debug("Registering volume control...");
     if (mysettings.id)
         svc_volume_control._id = mysettings.id;
-    rotel.volume_control = svc_volume_control.new_device({
+    rotel.volume_control = svc_volume_control.new_device(
+        {
         state: {
+            control_key:  mysettings.id,
             display_name: mysettings.displayname,
             volume_type:  "number",
             volume_min:   rotel.volume_min,
@@ -265,6 +267,7 @@ function ev_connected(data)
     rotel.source_control = svc_source_control.new_device(
         {
         state: {
+            control_key:      mysettings.id,
             display_name:     mysettings.displayname,
             supports_standby: true,
             status:           (data.power == "on" && data.source == mysettings.source) ? "selected" : "standby"
