@@ -33,6 +33,15 @@ RotelDevice.prototype._init = function()
     this.port = 9590;
 }
 
+RotelDevice.prototype._write = function(data)
+{
+    if (this.socket)
+    {
+        debug_socket("writing: data = " + data);
+        this.socket.write(data);
+    }
+}
+
 RotelDevice.prototype._process = function(data)
 {
     if (typeof data === 'string')
@@ -161,11 +170,11 @@ RotelDevice.prototype._process = function(data)
                 }
                 if (!wasOn && this.power == "on")
                 {
-                    this.socket.write("get_volume_min!");
-                    this.socket.write("get_volume_max!");
-                    this.socket.write("get_mute_status!");
-                    this.socket.write("get_current_source!");
-                    this.socket.write("get_volume!");
+                    this._write("get_volume_min!");
+                    this._write("get_volume_max!");
+                    this._write("get_mute_status!");
+                    this._write("get_current_source!");
+                    this._write("get_volume!");
                 }
             }
         }
@@ -200,7 +209,7 @@ RotelDevice.prototype.connect = function(host, port)
         {
             debug_socket("connected");
     
-            _this.socket.write("get_current_power!");
+            _this._write("get_current_power!");
         });
     
         this.socket.on('close', function(had_error)
@@ -248,7 +257,7 @@ RotelDevice.prototype.connect = function(host, port)
     
         this.socket.on('data', function(data)
         {
-            debug_socket("data = " + data);
+            debug_socket("reading: data = " + data);
             _this.dataTime = new Date().getTime();
             _this._process(data);
         });
@@ -285,7 +294,7 @@ RotelDevice.prototype.connect = function(host, port)
                     }
                     else
                     {
-                        _this.socket.write("get_current_power!");
+                        _this._write("get_current_power!");
                     }
                 }
                 else if (_this.connecting)
@@ -322,16 +331,13 @@ RotelDevice.prototype.disconnect = function()
 
 RotelDevice.prototype.set_volume = function(vol)
 {
-    if (this.socket)
+    if (this.power == "on")
     {
-        if (this.power == "on")
-        {
-            if (vol < 1)
-                vol = 1;
-            else if (vol > 95)
-                vol = 95;
-            this.socket.write("volume_" + vol + "!");
-        }
+        if (vol < 1)
+            vol = 1;
+        else if (vol > 95)
+            vol = 95;
+        this._write("volume_" + vol + "!");
     }
 }
 
@@ -339,28 +345,22 @@ RotelDevice.prototype.set_source = function(source)
 {
     if (this.socket)
     {
-        this.socket.write("power_on!");
-        this.socket.write(source + "!");
+        this._write("power_on!");
+        this._write(source + "!");
     }
 }
 
 RotelDevice.prototype.set_mute = function(mute)
 {
-    if (this.socket)
+    if (this.power == "on")
     {
-        if (this.power == "on")
-        {
-            this.socket.write(mute ? "mute_on!" : "mute_off!");
-        }
+        this._write(mute ? "mute_on!" : "mute_off!");
     }
 }
 
 RotelDevice.prototype.standby = function()
 {
-    if (this.socket)
-    {
-        this.socket.write("power_off!");
-    }
+    this._write("power_off!");
 }
 
 exports = module.exports = RotelDevice;
