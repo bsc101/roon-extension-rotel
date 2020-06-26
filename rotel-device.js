@@ -223,6 +223,10 @@ RotelDevice.prototype._process = function(data)
                     if (_changed)
                     {
                         this.emit('power', _power);
+                        if (_power == "on")
+                        {
+                            this.emit('volume', this.volume);
+                        }
                     }
                 }
                 else
