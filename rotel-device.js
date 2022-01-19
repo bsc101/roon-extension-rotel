@@ -407,10 +407,12 @@ RotelDevice.prototype.disconnect = function()
     }
 }
 
-RotelDevice.prototype.set_volume = function(vol)
+RotelDevice.prototype.set_volume = function(_vol)
 {
     if (this.power == "on")
     {
+        let vol = Math.round(_vol);
+
         if (vol < 1)
         {
             vol = 1;

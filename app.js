@@ -20,7 +20,7 @@ init();
 var roon = new RoonApi({
     extension_id:        'eu.bsc101.roon.rotel' + instance,
     display_name:        'Rotel Volume/Source Control' + instance_display_name,
-    display_version:     '1.1.1',
+    display_version:     '1.1.2',
     publisher:           'Boris Schaedler',
     email:               'dev@bsc101.eu',
     website:             'https://github.com/bsc101/roon-extension-rotel',
